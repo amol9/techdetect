@@ -12,10 +12,16 @@ res = requests.get(url, headers={"User-Agent": ua})
 x_powered_by = "X-Powered-By"
 if x_powered_by in res.headers.keys():
     xpb = res.headers[x_powered_by]
-    print(xpb)
 
-    if xpb == "Express":
+    if xpb.find("Express") > -1:
+        print("Express JS")
         print("Node.js")
+    
+    if xpb.find("PHP") > -1:
+        print("PHP")
+
+    if xpb.lower().find("ubuntu") > -1:
+        print("Ubuntu")
 
 amz_cf = "X-Amz-Cf"
 
@@ -23,6 +29,12 @@ for h in res.headers:
     if h.find(amz_cf) > -1:
         print("Amazon Cloudfront")
         break
+
+hdr_server = "Server"
+if hdr_server in res.headers.keys():
+    hs = res.headers[hdr_server]
+    if hs.find("nginx") > -1:
+        print("nginx")
 
 source = res.content
 
@@ -59,3 +71,6 @@ if find_in_source(b"amp-analytics", source) or find_in_source(b"googleanalytics"
 
 if find_in_source(b"googletagmanager\.com", source):
     print("Google Tag Manager")
+
+if find_in_source(b"script.*jquery.*js", source):
+    print("JQuery")
